@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Item } from '@prisma/client';
+import { Item, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -62,8 +62,12 @@ export class ItemsService {
     return item;
   }
 
-  findAll() {
-    return `This action returns all items`;
+  async findAllByUserId(userId: number): Promise<Item[]> {
+    return await this.prismaService.item.findMany({
+      where: {
+        userId,
+      },
+    });
   }
 
   findOne(id: number) {

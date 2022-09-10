@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -21,8 +23,8 @@ export class ItemsController {
   }
 
   @Get()
-  findAll() {
-    return this.itemsService.findAll();
+  findAllByUserId(@Query('userId', ParseIntPipe) userId: number) {
+    return this.itemsService.findAllByUserId(userId);
   }
 
   @Get(':id')
