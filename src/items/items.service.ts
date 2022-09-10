@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Item, Prisma } from '@prisma/client';
+import { Item } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -74,8 +74,17 @@ export class ItemsService {
     return `This action returns a #${id} item`;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+  async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+    const { name, isForRent } = updateItemDto;
+    return await this.prismaService.item.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        isForRent,
+      },
+    });
   }
 
   remove(id: number) {

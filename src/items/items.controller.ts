@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -18,12 +18,12 @@ export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
+  async create(@Body() createItemDto: CreateItemDto) {
     return this.itemsService.create(createItemDto);
   }
 
   @Get()
-  findAllByUserId(@Query('userId', ParseIntPipe) userId: number) {
+  async findAllByUserId(@Query('userId', ParseIntPipe) userId: number) {
     return this.itemsService.findAllByUserId(userId);
   }
 
@@ -32,9 +32,12 @@ export class ItemsController {
     return this.itemsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.update(+id, updateItemDto);
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateItemDto: UpdateItemDto,
+  ) {
+    return this.itemsService.update(id, updateItemDto);
   }
 
   @Delete(':id')
